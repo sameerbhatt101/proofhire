@@ -24,7 +24,7 @@ Attestcoin proves that acceptance so Creditcoin can release escrow and update re
 - Detail: https://dorahacks.io/hackathon/buidl-ctc-2026-fall/detail
 - Deadline: **2026-09-13 23:59:00 ET** (extended)
 - Prizes: USD 15,000 (10k / 3k / 2k) + CEIP fast-track for top 3
-- **Submit paste sheet:** [SUBMIT_NOW.md](./SUBMIT_NOW.md)
+- **Submit paste sheet:** [SAMEER_SUBMIT.md](./SAMEER_SUBMIT.md) (also [SUBMIT_NOW.md](./SUBMIT_NOW.md))
 - Companion: [HACKATHON_BRIEF.md](./HACKATHON_BRIEF.md) · [ARCHITECTURE.md](./ARCHITECTURE.md) · [DEMO_SCRIPT.md](./DEMO_SCRIPT.md) · [SAMEER_STEPS.md](./SAMEER_STEPS.md) · [submit/ATTESTCOIN_INTEGRATION_SUMMARY.md](./submit/ATTESTCOIN_INTEGRATION_SUMMARY.md)
 
 ## Why Attestcoin is core

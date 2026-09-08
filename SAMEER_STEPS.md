@@ -8,7 +8,8 @@
 - Public GitHub: https://github.com/sameerbhatt101/proofhire
 - Sepolia AcceptanceRegistry live: `0x46F8A74A0F64Da7D778645e9Aa1f6116500213e6`
 - Pitch PDF + HTML deck + Attestcoin summary under `submit/` and `apps/demo/`
-- Static GitHub Pages demo/pitch (when enabled): https://sameerbhatt101.github.io/proofhire/
+- Static GitHub Pages demo/pitch (**live**): https://sameerbhatt101.github.io/proofhire/
+- **Paste sheet for submit:** [SAMEER_SUBMIT.md](./SAMEER_SUBMIT.md)
 
 ## Must do yourself
 

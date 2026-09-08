@@ -1,5 +1,7 @@
 # ProofHire — DoraHacks submit NOW (Sameer-only)
 
+> **Canonical paste sheet:** [SAMEER_SUBMIT.md](./SAMEER_SUBMIT.md) (use that file first for last-minute KYC + Submit BUIDL).
+
 **Deadline:** 2026-09-13 23:59:00 ET (page Extended: 2026-09-14 03:59 UTC)  
 **Hackathon:** https://dorahacks.io/hackathon/buidl-ctc-2026-fall/detail  
 **Register / Submit BUIDL** from that page (Sameer KYC — agent cannot do this).
