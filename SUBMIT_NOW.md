@@ -15,3 +15,5 @@
 4. DoraHacks registration = Sameer KYC fields only when ready
 
 Deadline: 2026-09-13 23:59 ET
+
+Public repo: https://github.com/sameerbhatt101/proofhire

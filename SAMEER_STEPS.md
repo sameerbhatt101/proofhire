@@ -24,3 +24,5 @@ Deadline: **2026-09-13 23:59 ET** — leave at least 24h buffer.
 
 ## After submit
 15. Winners announced 2026-09-20; prepare CEIP diligence folder if shortlisted.
+
+Public repo: https://github.com/sameerbhatt101/proofhire

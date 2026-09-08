@@ -38,3 +38,5 @@ Payout path calls BlockProver precompile 0xFD2 inside the Creditcoin transaction
 Readability: Sepolia MilestoneAccepted -> ProofBuilder proofs -> ProofHireVault.execute -> verifyAndEmit at 0xFD2 -> EvmV1Decoder receipt+event checks -> escrow release + reputation.
 
 MIT for ProofHire app logic. Gluwa packages keep upstream licenses.
+
+Public repo: https://github.com/sameerbhatt101/proofhire
