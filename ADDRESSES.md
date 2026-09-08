@@ -1,9 +1,16 @@
 # ProofHire testnet addresses (Money-owned)
 
 | Role | Address |
-|------|---------|
+| --- | --- |
 | Deployer | `0x36ad6007029893d3189b519193061e955C414989` |
 | Worker | `0x70B1a6460d47fD48548f73aD4bB701757400D1F2` |
 | Client | `0xb10D69636B782BBbDB3a61886DA365808D0d7105` |
 
-Private keys only in agent secrets. Never commit `.env`.
+## Contracts
+
+| Contract | Network | Address |
+| --- | --- | --- |
+| AcceptanceRegistry | Sepolia | [`0x46F8A74A0F64Da7D778645e9Aa1f6116500213e6`](https://sepolia.etherscan.io/address/0x46F8A74A0F64Da7D778645e9Aa1f6116500213e6) |
+| ProofHireVault | CC3 testnet | *pending Discord CTC faucet — no address yet* |
+
+Private keys only in agent secrets. Never commit `.env` or `*keys*.json`.

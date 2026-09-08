@@ -1,28 +1,26 @@
-# Sameer-only steps (cannot be done by the agent)
+# Sameer-only steps (agent cannot KYC / Discord / record video)
 
-Deadline: **2026-09-13 23:59 ET** — leave at least 24h buffer.
+**Deadline:** 2026-09-13 23:59 ET — leave ≥24h buffer.  
+**Authoritative paste sheet:** SUBMIT_NOW.md
 
-## Account / compliance
-1. Register as hacker on https://dorahacks.io/hackathon/buidl-ctc-2026-fall/detail
-2. Create/confirm DoraHacks team (size >= 1). Enter legal name, email, citizenship, residence, bio, role.
-3. Complete any DoraHacks / prize KYC prompts if shown (needed for payout + CEIP).
-4. Confirm eligibility: not sanctioned; no criminal record/pending cases; local law OK.
+## Already done (do not redo)
 
-## Keys, faucets, deploys
-5. Join Creditcoin Discord https://discord.gg/Gu43zTfmtc — request CC3 testnet CTC from faucet.
-6. Get Sepolia ETH.
-7. Fund deployer; set `.env` from `.env.example` (never commit keys).
-8. Deploy AcceptanceRegistry (Sepolia) + ProofHireVault (CC3 testnet) per README.
-9. Run one full loop; save explorer URLs for deck + DoraHacks description.
+- Public GitHub: https://github.com/sameerbhatt101/proofhire
+- Sepolia AcceptanceRegistry live: `0x46F8A74A0F64Da7D778645e9Aa1f6116500213e6`
+- Pitch PDF + HTML deck + Attestcoin summary under `submit/` and `apps/demo/`
+- Static GitHub Pages demo/pitch (when enabled): https://sameerbhatt101.github.io/proofhire/
 
-## Submission artifacts
-10. Push this repo to your public GitHub with README intact.
-11. Record demo video from DEMO_SCRIPT.md.
-12. Build PDF deck from PITCH_DECK_OUTLINE.md; host a stable PDF URL.
-13. Submit on DoraHacks: sector AI (or DeFi), Attestcoin integration summary from README, all URLs.
-14. Email team@creditcoin.org or Discord #buidl-ctc-qna only if blocked on faucet/docs.
+## Must do yourself
+
+1. **Register / KYC** on https://dorahacks.io/hackathon/buidl-ctc-2026-fall/detail  
+   - Create team (size ≥1). Legal name, email, citizenship, residence, bio, role.  
+   - Complete DoraHacks / prize KYC if prompted (payout + CEIP).  
+   - Confirm eligibility (not sanctioned; no criminal record/pending; local law OK).
+2. **Record demo video** from DEMO_SCRIPT.md (YouTube unlisted OK).  
+   - If CC3 faucet still parked: film Sepolia registry + Pages demo/pitch; say vault is faucet-pending — do not invent a CC3 address.
+3. **Submit BUIDL** using SUBMIT_NOW.md paste table (sector `AI`, GitHub, PDF URL, Attestcoin summary, video URL).
+4. **Optional:** Creditcoin Discord faucet → fund → deploy ProofHireVault → add explorer URL to submission description. Agent will not touch Discord.
 
 ## After submit
-15. Winners announced 2026-09-20; prepare CEIP diligence folder if shortlisted.
 
-Public repo: https://github.com/sameerbhatt101/proofhire
+5. Winners 2026-09-20; prepare CEIP diligence if shortlisted.

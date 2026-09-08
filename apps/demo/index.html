@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ProofHire Demo</title>
+  <title>ProofHire Demo — BUIDL CTC 2026 Fall</title>
+  <meta name="description" content="ProofHire: Attestcoin milestone escrow — Sepolia acceptance, Creditcoin settlement." />
   <style>
     body { font-family: ui-sans-serif, system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #18181b; }
     code { background: #f4f4f5; padding: 0.1rem 0.3rem; border-radius: 4px; font-size: 0.92em; }
@@ -15,9 +16,7 @@
       margin: 1.25rem 0 1.5rem; padding: 0.85rem 1rem;
       background: #f8fafc; border: 1px solid #e4e4e7; border-radius: 10px;
     }
-    .bar a {
-      color: #4f46e5; font-weight: 600; text-decoration: none;
-    }
+    .bar a { color: #4f46e5; font-weight: 600; text-decoration: none; }
     .bar a:hover { text-decoration: underline; }
     .pill {
       font-size: 0.75rem; padding: 0.2rem 0.55rem; border-radius: 999px;
@@ -25,14 +24,19 @@
     }
     .pill.warn { background: #fffbeb; color: #b45309; }
     .addr { word-break: break-all; font-size: 0.9rem; }
+    .links { margin: 1.5rem 0; padding: 1rem; background: #fafafa; border-radius: 10px; border: 1px solid #e4e4e7; }
+    .links ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+    .links a { color: #4f46e5; }
   </style>
 </head>
 <body>
   <h1>ProofHire</h1>
-  <p class="muted">Attestcoin milestone escrow — demo walkthrough (static UI)</p>
+  <p class="muted">Attestcoin milestone escrow — demo walkthrough (static UI) · DoraHacks BUIDL CTC 2026 Fall · Track AI</p>
 
   <div class="bar">
     <a href="./pitch.html">Pitch deck →</a>
+    <a href="./ProofHire_Pitch.pdf">Pitch PDF</a>
+    <a href="https://github.com/sameerbhatt101/proofhire" target="_blank" rel="noopener">GitHub</a>
     <span class="pill">Sepolia live</span>
     <span class="pill warn">CC3 vault pending faucet</span>
   </div>
@@ -41,12 +45,26 @@
     AcceptanceRegistry (Sepolia):
     <code><a href="https://sepolia.etherscan.io/address/0x46F8A74A0F64Da7D778645e9Aa1f6116500213e6" target="_blank" rel="noopener">0x46F8A74A0F64Da7D778645e9Aa1f6116500213e6</a></code>
   </p>
+  <p class="addr muted">
+    Deploy tx:
+    <code><a href="https://sepolia.etherscan.io/tx/0x0f3af57c8f1bdf76de53cca899629fa57189027dcee4f77ad8d8768d7a70a47f" target="_blank" rel="noopener">0x0f3af57c…a47f</a></code>
+  </p>
 
   <div class="step"><strong>1. Open job</strong> on Creditcoin <code>ProofHireVault.openJob</code> with CTC escrow.</div>
   <div class="step"><strong>2. Deliver</strong> work off-band (PR, media, agent output).</div>
   <div class="step"><strong>3. Accept</strong> on Sepolia <code>AcceptanceRegistry.acceptMilestone</code>.</div>
   <div class="step"><strong>4. Prove</strong> with <code>@gluwa/usc-sdk</code> ProofBuilder; call <code>execute</code>.</div>
   <div class="step"><strong>5. Settle</strong> — 0xFD2 verifies proofs; vault pays worker; reputation++.</div>
-  <p class="muted">Follow DEMO_SCRIPT.md for recording. Creditcoin vault deploy awaits Discord CTC faucet.</p>
+
+  <div class="links">
+    <strong>Judge links</strong>
+    <ul>
+      <li>Repo + README: <a href="https://github.com/sameerbhatt101/proofhire" target="_blank" rel="noopener">github.com/sameerbhatt101/proofhire</a></li>
+      <li>Attestcoin summary: <a href="https://github.com/sameerbhatt101/proofhire/blob/main/submit/ATTESTCOIN_INTEGRATION_SUMMARY.md" target="_blank" rel="noopener">submit/ATTESTCOIN_INTEGRATION_SUMMARY.md</a></li>
+      <li>Hackathon: <a href="https://dorahacks.io/hackathon/buidl-ctc-2026-fall/detail" target="_blank" rel="noopener">BUIDL CTC 2026 Fall</a></li>
+    </ul>
+  </div>
+
+  <p class="muted">Follow <code>DEMO_SCRIPT.md</code> for recording. Creditcoin vault deploy awaits Discord CTC faucet — no fabricated CC3 address.</p>
 </body>
 </html>
