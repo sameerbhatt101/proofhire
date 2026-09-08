@@ -1,0 +1,60 @@
+name: check-abi
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+
+permissions: read-all
+
+jobs:
+  setup:
+    outputs:
+      release_tag: ${{ steps.testnet-env.outputs.release_tag }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Testnet ENV
+        id: testnet-env
+        run: |
+          RELEASE_TAG=$(.github/extract-release-tag.sh "testnet")
+          echo "release_tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
+
+  execute:
+    needs:
+      - setup
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        artifact:
+          - block_prover.json
+          - chain_info.json
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Download ${{ matrix.artifact }} for release ${{ needs.setup.outputs.release_tag }}
+        uses: i3h/download-release-asset@v1
+        with:
+          owner: gluwa
+          repo: creditcoin3
+          tag: ${{ needs.setup.outputs.release_tag }}
+          file: ${{ matrix.artifact }}
+          path: canonical/
+          token: ${{ secrets.GLUWA_BOT_TOKEN }}
+
+      - name: Local ABI should be the same as latest from Creditcoin release
+        run: |
+          LOCAL_FILE=$(find src/ -name "${{ matrix.artifact }}")
+
+          if [ -z "$LOCAL_FILE" ]; then
+            echo "ERROR: local file not found. Cannot compare ..."
+            exit 1
+          fi
+
+          sudo apt-get install colordiff
+
+          diff -u  "canonical/${{ matrix.artifact }}" "$LOCAL_FILE" | colordiff
+          diff -qu "canonical/${{ matrix.artifact }}" "$LOCAL_FILE"

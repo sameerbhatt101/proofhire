@@ -1,0 +1,59 @@
+---
+name: examples
+
+'on':
+  pull_request:
+    paths:
+      - '**.ts'
+      - '**.js'
+      - '.github/workflows/examples.yaml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions: read-all
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install @gluwa/usc-sdk from source
+        run: |
+          npm install
+          npm run build
+          npm pack
+          npm install ./gluwa-usc-sdk-*.tgz
+
+      - name: Execute examples
+        env:
+          CREDITCOIN_RPC_URL: 'https://rpc.cc3-devnet.creditcoin.network'
+          CREDITCOIN_PROOF_BUILDER_URL: 'https://prover.cc3-devnet.creditcoin.network/'
+          # Sepolia Full Archive: 1 / Ethereum Mainnet Full Archive: 2
+          # both are attested to since genesis
+          SOURCE_CHAIN_KEY: 1
+          # from Apr 30, 2026
+          SOURCE_CHAIN_BLOCK_HEIGHT: 10760862
+          # txn from the block above, sends 0.004 ETH
+          SOURCE_CHAIN_TXN_HASH: '0xba956ac665d7c36bab907d0a3c8a7f977132ac8717f02c1a8056aa0d24505ae5'
+          # 1st txn from block 10760863 (block above +1), for batch example
+          SOURCE_CHAIN_TXN_HASH_2: '0x84a747d76fdef74607ef65f682bcd201f8ae6771107a0fab385db7ebedb00675'
+          # 2nd txn from block 10760962 (block above +100), for batch example
+          SOURCE_CHAIN_TXN_HASH_3: '0xf4e6d7d7087241644cb0c49825368f50c3f71792f6a02c470aee3f913f6946fc'
+        run: |
+          for example in examples/*.ts; do
+            echo "INFO: will execute $example"
+
+            npx ts-node $example
+
+            echo "DONE: executing $example"
+          done

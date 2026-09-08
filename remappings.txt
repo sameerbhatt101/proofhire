@@ -1,0 +1,3 @@
+@gluwa/asc-contracts/=node_modules/@gluwa/asc-contracts/
+@openzeppelin/contracts/=node_modules/@openzeppelin/contracts/
+forge-std/=lib/forge-std/src/

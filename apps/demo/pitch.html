@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ProofHire — Pitch Deck | BUIDL CTC 2026 Fall</title>
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --bg-card: #121826;
+      --bg-elev: #1a2234;
+      --border: #2a3548;
+      --text: #e8edf7;
+      --muted: #8b97b0;
+      --accent: #6366f1;
+      --accent-2: #22d3ee;
+      --accent-3: #a78bfa;
+      --good: #34d399;
+      --warn: #fbbf24;
+      --danger: #f87171;
+      --grad: linear-gradient(135deg, #6366f1 0%, #22d3ee 100%);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      line-height: 1.45;
+      overflow: hidden;
+    }
+    .deck {
+      height: 100%;
+      width: 100%;
+      position: relative;
+    }
+    .slide {
+      display: none;
+      height: 100%;
+      padding: 3.5rem 4.5rem 5rem;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 1100px;
+      margin: 0 auto;
+      animation: fadeIn 0.28s ease;
+    }
+    .slide.active { display: flex; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    h1 {
+      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+    }
+    h1 .grad {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 650;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+    .lead {
+      font-size: 1.2rem;
+      color: var(--muted);
+      max-width: 42rem;
+    }
+    .meta {
+      margin-top: 1.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .chip.live { border-color: rgba(52,211,153,0.45); color: var(--good); }
+    .chip.warn { border-color: rgba(251,191,36,0.45); color: var(--warn); }
+    .chip.accent { border-color: rgba(99,102,241,0.5); color: #a5b4fc; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.15rem 1.25rem;
+    }
+    .card.highlight {
+      border-color: rgba(99,102,241,0.55);
+      background: linear-gradient(160deg, rgba(99,102,241,0.12), rgba(18,24,38,0.95));
+    }
+    .card p, .card li { color: var(--muted); font-size: 0.95rem; }
+    ul.clean {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    ul.clean li {
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+      color: var(--muted);
+    }
+    ul.clean li::before {
+      content: "";
+      width: 0.45rem;
+      height: 0.45rem;
+      margin-top: 0.45rem;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+    .compare .bad { border-top: 3px solid var(--danger); }
+    .compare .good { border-top: 3px solid var(--good); }
+    .label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    code, .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.86em;
+    }
+    .addr {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      word-break: break-all;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.9rem;
+      color: var(--accent-2);
+      margin: 0.75rem 0;
+    }
+    a {
+      color: var(--accent-2);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: stretch;
+      margin-top: 0.75rem;
+    }
+    .flow-step {
+      flex: 1 1 140px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem;
+      position: relative;
+    }
+    .flow-step .n {
+      display: inline-flex;
+      width: 1.5rem;
+      height: 1.5rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--grad);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+    }
+    .flow-step p { font-size: 0.85rem; color: var(--muted); }
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.5rem;
+      background: rgba(11,15,26,0.92);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      z-index: 20;
+    }
+    .nav-left, .nav-right { display: flex; gap: 0.5rem; align-items: center; }
+    .btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .btn:disabled { opacity: 0.35; cursor: default; }
+    .progress {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+    }
+    .dot.on { background: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,0.25); }
+    .slide-num {
+      font-size: 0.8rem;
+      color: var(--muted);
+      min-width: 4rem;
+      text-align: center;
+    }
+    .title-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: var(--grad);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: #fff;
+      box-shadow: 0 8px 28px rgba(99,102,241,0.35);
+    }
+    .cite {
+      margin-top: 1.25rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .kbd {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .kbd kbd {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.35rem;
+      font-family: inherit;
+    }
+    .big-ask {
+      font-size: 1.35rem;
+      font-weight: 650;
+      margin: 0.75rem 0 1.25rem;
+      max-width: 40rem;
+    }
+    .status-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+      font-size: 0.92rem;
+    }
+    .status-table th, .status-table td {
+      text-align: left;
+      padding: 0.7rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .status-table th { color: var(--muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .pill {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .pill.ok { background: rgba(52,211,153,0.15); color: var(--good); }
+    .pill.pending { background: rgba(251,191,36,0.15); color: var(--warn); }
+    @media (max-width: 800px) {
+      .slide { padding: 2rem 1.25rem 5.5rem; }
+      .grid-2, .grid-3, .compare { grid-template-columns: 1fr; }
+      h1 { font-size: 1.85rem; }
+    }
+    @media print {
+      html, body { overflow: visible; height: auto; background: #fff; color: #111; }
+      .nav { display: none; }
+      .slide {
+        display: flex !important;
+        page-break-after: always;
+        height: auto;
+        min-height: 90vh;
+        color: #111;
+        animation: none;
+      }
+      .card, .flow-step, .addr { background: #f8fafc; border-color: #cbd5e1; }
+      .lead, .card p, .card li, ul.clean li, .flow-step p { color: #334155; }
+      .addr { color: #0e7490; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+
+    <!-- 1. Title -->
+    <section class="slide active" data-title="Title">
+      <div class="title-brand">
+        <div class="logo">PH</div>
+        <div>
+          <div class="eyebrow">DoraHacks · BUIDL CTC 2026 Fall · Track AI</div>
+          <h1><span class="grad">ProofHire</span></h1>
+        </div>
+      </div>
+      <p class="lead">
+        Milestone escrow across chains: accept work on Ethereum Sepolia,
+        lock capital &amp; reputation on Creditcoin — Attestcoin is the only bridge.
+      </p>
+      <div class="meta">
+        <span class="chip accent">Attestcoin-native</span>
+        <span class="chip">Sameer Bhatt / Agent Money</span>
+        <span class="chip live">Sepolia live</span>
+        <span class="chip warn">CC3 vault pending faucet</span>
+      </div>
+    </section>
+
+    <!-- 2. Problem -->
+    <section class="slide" data-title="Problem">
+      <div class="eyebrow">Problem</div>
+      <h2>Platforms are still the oracle</h2>
+      <div class="compare">
+        <div class="card bad">
+          <div class="label">Today</div>
+          <ul class="clean">
+            <li>Freelance / agent payouts settle on platform trust</li>
+            <li>Clients live on Ethereum; credit rails live elsewhere</li>
+            <li>Escrow backends can lie about “acceptance”</li>
+            <li>Reputation is off-chain and gameable</li>
+          </ul>
+        </div>
+        <div class="card good">
+          <div class="label">Needed</div>
+          <ul class="clean">
+            <li>Acceptance as a verifiable on-chain fact</li>
+            <li>Capital release only after cryptographic proof</li>
+            <li>Creditcoin reputation from proved work, not scores</li>
+            <li>No centralized settlement operator</li>
+          </ul>
+        </div>
+      </div>
+      <p class="cite">Clients on Ethereum · credit &amp; escrow on Creditcoin · no shared trust root without Attestcoin.</p>
+    </section>
+
+    <!-- 3. Solution -->
+    <section class="slide" data-title="Solution">
+      <div class="eyebrow">Solution</div>
+      <h2>ProofHire: escrow CTC · accept on Sepolia · Attestcoin settles</h2>
+      <div class="flow">
+        <div class="flow-step">
+          <div class="n">1</div>
+          <h3>Lock</h3>
+          <p>Client opens job; CTC escrowed in <span class="mono">ProofHireVault</span> on Creditcoin.</p>
+        </div>
+        <div class="flow-step">
+          <div class="n">2</div>
+          <h3>Deliver</h3>
+          <p>Worker ships off-band (PR, media, agent output).</p>
+        </div>
+        <div class="flow-step">
+          <div class="n">3</div>
+          <h3>Accept</h3>
+          <p>Client calls <span class="mono">acceptMilestone</span> on Sepolia <span class="mono">AcceptanceRegistry</span>.</p>
+        </div>
+        <div class="flow-step">
+          <div class="n">4</div>
+          <h3>Prove &amp; pay</h3>
+          <p>Attestcoin proof → vault verifies in-tx → payout + reputation.</p>
+        </div>
+      </div>
+      <div class="meta" style="margin-top:1.5rem">
+        <span class="chip">No centralized oracle</span>
+        <span class="chip">Same-tx BlockProver verify</span>
+        <span class="chip">Replay-safe ASCBase dedupe</span>
+      </div>
+    </section>
+
+    <!-- 4. Attestcoin depth -->
+    <section class="slide" data-title="Attestcoin">
+      <div class="eyebrow">Why Attestcoin is core</div>
+      <h2>Integration depth — not a wrapper</h2>
+      <div class="grid-2">
+        <div class="card highlight">
+          <h3>In-transaction verify</h3>
+          <p>Payout path calls BlockProver precompile <span class="mono">0xFD2</span> inside the Creditcoin tx via <span class="mono">ASCBase</span> (<span class="mono">@gluwa/asc-contracts</span>).</p>
+        </div>
+        <div class="card">
+          <h3>ASCBase dedupe</h3>
+          <p>Query already processed → replay fails. Escrow cannot be double-spent from the same attested source tx.</p>
+        </div>
+        <div class="card">
+          <h3>EvmV1Decoder binding</h3>
+          <p>Receipt status + event checks: emitter allowlist, job/worker binding, <span class="mono">receiptStatus == 1</span>.</p>
+        </div>
+        <div class="card">
+          <h3>USC ProofBuilder</h3>
+          <p>Readability worker: wait attestation → <span class="mono">ProofBuilder.getProof</span> → <span class="mono">vault.execute</span> (<span class="mono">@gluwa/usc-sdk</span>).</p>
+        </div>
+      </div>
+      <p class="cite">Cite: <a href="https://docs.attestcoin.org/" target="_blank" rel="noopener">docs.attestcoin.org</a> · dApp Builder Infrastructure (Source SC / Worker / ASC / Logic)</p>
+    </section>
+
+    <!-- 5. Architecture -->
+    <section class="slide" data-title="Architecture">
+      <div class="eyebrow">Architecture</div>
+      <h2>Official Attestcoin dApp Builder shape</h2>
+      <div class="grid-2">
+        <div class="stack">
+          <div class="card">
+            <div class="label">1 · Source SC</div>
+            <h3>AcceptanceRegistry (Sepolia)</h3>
+            <p>Emits <span class="mono">MilestoneAccepted</span> — the attested fact.</p>
+          </div>
+          <div class="card">
+            <div class="label">2 · Readability worker</div>
+            <h3>TypeScript + USC SDK</h3>
+            <p><span class="mono">waitUntilHeightAttested</span> → proofs → call ASC.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="label">3 · ASC</div>
+            <h3>ProofHireVault extends ASCBase</h3>
+            <p><span class="mono">verifyAndEmit</span> at BlockProver <span class="mono">0xFD2</span>.</p>
+          </div>
+          <div class="card highlight">
+            <div class="label">4 · Business logic</div>
+            <h3>Release + reputation</h3>
+            <p>Same contract: pay worker CTC, increment proved-work reputation.</p>
+          </div>
+        </div>
+      </div>
+      <p class="cite">Without Attestcoin: backend tells Creditcoin “accepted.” With it: Merkle + continuity inclusion proof required in the payout tx.</p>
+    </section>
+
+    <!-- 6. Live status / addresses -->
+    <section class="slide" data-title="Status">
+      <div class="eyebrow">Deployment status</div>
+      <h2>Sepolia live · Creditcoin vault pending faucet</h2>
+      <table class="status-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Network</th>
+            <th>Status</th>
+            <th>Address / note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>AcceptanceRegistry</strong></td>
+            <td>Sepolia</td>
+            <td><span class="pill ok">Live</span></td>
+            <td class="mono">0x46F8A74A0F64Da7D778645e9Aa1f6116500213e6</td>
+          </tr>
+          <tr>
+            <td><strong>ProofHireVault</strong></td>
+            <td>CC3 testnet</td>
+            <td><span class="pill pending">Pending</span></td>
+            <td>Awaiting Discord CTC faucet</td>
+          </tr>
+          <tr>
+            <td>forge build / tests</td>
+            <td>—</td>
+            <td><span class="pill ok">Pass</span></td>
+            <td>AcceptanceRegistry tests green; via_ir for EvmV1Decoder</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="addr">
+        Sepolia: <a href="https://sepolia.etherscan.io/address/0x46F8A74A0F64Da7D778645e9Aa1f6116500213e6" target="_blank" rel="noopener">0x46F8A74A0F64Da7D778645e9Aa1f6116500213e6</a>
+      </div>
+      <p class="cite">Deployer <span class="mono">0x36ad…4989</span> · Deploy tx <span class="mono">0x0f3af57c…a47f</span> · No fabricated metrics.</p>
+    </section>
+
+    <!-- 7. Demo flow -->
+    <section class="slide" data-title="Demo">
+      <div class="eyebrow">Demo flow · ≤ 3 min</div>
+      <h2>From escrow lock to proved payout</h2>
+      <div class="grid-3">
+        <div class="card">
+          <div class="label">0:00 – 0:50</div>
+          <h3>Hook + openJob</h3>
+          <p>Trust problem → lock CTC escrow on Creditcoin (Blockscout).</p>
+        </div>
+        <div class="card">
+          <div class="label">0:50 – 1:20</div>
+          <h3>acceptMilestone</h3>
+          <p>Show delivery artifact → Sepolia <span class="mono">MilestoneAccepted</span> log on live registry.</p>
+        </div>
+        <div class="card">
+          <div class="label">1:20 – 2:40</div>
+          <h3>Prove · settle · replay</h3>
+          <p>Attestcoin proof → 0xFD2 verify → payout + reputation → replay fails.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1rem">
+        <h3>Wedge</h3>
+        <p style="color:var(--muted)">Primary: AI agent / human milestone hiring for Agent Money. Stretch: freelance milestones, sponsorship authenticity. Secondary DeFi escrow + attested work-credit rail (CEIP).</p>
+      </div>
+    </section>
+
+    <!-- 8. Team -->
+    <section class="slide" data-title="Team">
+      <div class="eyebrow">Team</div>
+      <h2>Builder &amp; agent</h2>
+      <div class="grid-2">
+        <div class="card highlight">
+          <div class="label">Human · Lead</div>
+          <h3>Sameer Bhatt</h3>
+          <p>Project lead, DoraHacks registration / KYC, faucet &amp; submission owner. Hackathon builder of record.</p>
+        </div>
+        <div class="card">
+          <div class="label">Agent · Engineering</div>
+          <h3>Money (Agent Money)</h3>
+          <p>Contracts, worker, demo, Attestcoin integration scaffolding, testnet Sepolia deploy, docs &amp; pitch artifacts.</p>
+        </div>
+      </div>
+      <div class="meta">
+        <span class="chip">Track: AI (primary)</span>
+        <span class="chip">MIT app logic</span>
+        <span class="chip">Gluwa packages: upstream licenses</span>
+      </div>
+    </section>
+
+    <!-- 9. Ask -->
+    <section class="slide" data-title="Ask">
+      <div class="eyebrow">The ask</div>
+      <h2>Deepest Attestcoin use + CEIP work-credit rail</h2>
+      <p class="big-ask">
+        Judge us on Attestcoin utilization depth: Source SC → USC proofs → ASCBase / 0xFD2 in-tx verify → escrow + reputation — not a side quest.
+      </p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>What ships now</h3>
+          <ul class="clean">
+            <li>Live Sepolia AcceptanceRegistry</li>
+            <li>Vault + worker scaffold on ASC / USC</li>
+            <li>Foundry tests green; architecture docs</li>
+          </ul>
+        </div>
+        <div class="card highlight">
+          <h3>What we want</h3>
+          <ul class="clean">
+            <li>Recognition for core Attestcoin path</li>
+            <li>CEIP fast-track: attested work → credit</li>
+            <li>CC3 faucet unlock to finish live loop</li>
+          </ul>
+        </div>
+      </div>
+      <div class="meta">
+        <span class="chip accent">BUIDL CTC 2026 Fall</span>
+        <span class="chip">Deadline 2026-09-13 23:59 ET</span>
+        <span class="chip"><a href="./index.html">Demo walkthrough →</a></span>
+      </div>
+    </section>
+
+  </div>
+
+  <nav class="nav" aria-label="Deck navigation">
+    <div class="nav-left">
+      <button class="btn" id="prev" type="button">← Prev</button>
+      <span class="slide-num" id="slideNum">1 / 9</span>
+      <button class="btn" id="next" type="button">Next →</button>
+    </div>
+    <div class="progress" id="dots" aria-hidden="true"></div>
+    <div class="nav-right">
+      <span class="kbd"><kbd>←</kbd> <kbd>→</kbd> or click · <kbd>F</kbd> fullscreen</span>
+    </div>
+  </nav>
+
+  <script>
+    (function () {
+      var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+      var i = 0;
+      var dots = document.getElementById("dots");
+      var num = document.getElementById("slideNum");
+      var prev = document.getElementById("prev");
+      var next = document.getElementById("next");
+
+      slides.forEach(function (_, idx) {
+        var d = document.createElement("button");
+        d.className = "dot" + (idx === 0 ? " on" : "");
+        d.type = "button";
+        d.setAttribute("aria-label", "Go to slide " + (idx + 1));
+        d.addEventListener("click", function () { go(idx); });
+        dots.appendChild(d);
+      });
+
+      function go(n) {
+        if (n < 0 || n >= slides.length) return;
+        slides[i].classList.remove("active");
+        dots.children[i].classList.remove("on");
+        i = n;
+        slides[i].classList.add("active");
+        dots.children[i].classList.add("on");
+        num.textContent = (i + 1) + " / " + slides.length;
+        prev.disabled = i === 0;
+        next.disabled = i === slides.length - 1;
+        location.hash = String(i + 1);
+      }
+
+      prev.addEventListener("click", function () { go(i - 1); });
+      next.addEventListener("click", function () { go(i + 1); });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+          e.preventDefault();
+          go(i + 1);
+        } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+          e.preventDefault();
+          go(i - 1);
+        } else if (e.key === "Home") {
+          go(0);
+        } else if (e.key === "End") {
+          go(slides.length - 1);
+        } else if (e.key === "f" || e.key === "F") {
+          if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {});
+          else document.exitFullscreen();
+        }
+      });
+
+      var fromHash = parseInt((location.hash || "").replace("#", ""), 10);
+      if (fromHash >= 1 && fromHash <= slides.length) go(fromHash - 1);
+      else go(0);
+    })();
+  </script>
+</body>
+</html>

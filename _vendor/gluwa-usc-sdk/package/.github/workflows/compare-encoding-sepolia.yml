@@ -1,0 +1,244 @@
+---
+name: compare-encoding-sepolia
+
+'on':
+  pull_request:
+    paths:
+      - '**.rs'
+      - '**.ts'
+      - '**Cargo**'
+      - '**package*.json'
+      - '.github/workflows/compare-encoding-*.yml'
+  schedule:
+    - cron: '12 */12 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions: read-all
+
+jobs:
+  setup:
+    runs-on: ubuntu-24.04
+    outputs:
+      # vvv how long to keep encoding blocks
+      timeout-minutes: ${{ steps.cron-env.outputs.timeout-minutes || 3 }}
+      step-timeout: ${{ steps.cron-env.outputs.step-timeout || 5 }}
+      # ^^^ how long to wait for the encoding-blocks program to exit
+      # WARNING: must be greater than the value of `timeout-minutes`
+
+    steps:
+      - name: Cron ENV
+        id: cron-env
+        if: github.event_name == 'schedule'
+        run: |
+          # shellcheck disable=SC2129
+          echo "timeout-minutes=60" >> "$GITHUB_OUTPUT"
+          echo "step-timeout=62" >> "$GITHUB_OUTPUT"
+
+  alloy-encode:
+    needs:
+      - setup
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Configure rustc version
+        run: |
+          RUSTC_VERSION=$(grep channel rust/rust-toolchain.toml | tail -n1 | tr -d " " | cut -f2 -d'"')
+          echo "RUSTC_VERSION=$RUSTC_VERSION" >> "$GITHUB_ENV"
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ env.RUSTC_VERSION }}
+          targets: wasm32-unknown-unknown
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+
+      - name: Build
+        working-directory: rust
+        run: |
+          cargo build --release
+
+      - name: Execute for ${{ needs.setup.outputs.timeout-minutes }} minutes
+        timeout-minutes: ${{ fromJSON(needs.setup.outputs.step-timeout) }}
+        working-directory: rust
+        run: |
+          ./target/release/encode-blocks \
+            --eth-rpc-url wss://blockchain.googleapis.com/v1/projects/creditcoin-test/locations/us-central1/endpoints/ethereum-sepolia/rpc?key=${{ secrets.GOOGLE_SEPOLIA_RPC_KEY }} \
+            --path-to-store-json /var/tmp/encoded-data/alloy/
+        env:
+          TIMEOUT_MINUTES: ${{ needs.setup.outputs.timeout-minutes }}
+
+      - name: Add notices in case of failure
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          # note: GitHub appears to display these in reverse order
+          echo "::notice::SUGGESTION: Trigger this workflow manually against the same branch to verify the changes."
+          echo "::notice::IMPORTANT:  Secret credentials may be missing for PRs from Dependabot!"
+
+      - name: Report result to Slack
+        if: failure() && github.event_name == 'schedule'
+        uses: act10ns/slack@v2
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          status: ${{ job.status }}
+          channel: '#protocol-internal'
+          message: 'Alloy encode failed! cc <@U028EMRHS3S>'
+
+      - name: Upload encoded data
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: encoded-by-alloy
+          path: /var/tmp/encoded-data/alloy
+          include-hidden-files: true
+
+  ethers-encode:
+    needs:
+      - setup
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm run build --if-present
+
+      - name: Execute for ${{ needs.setup.outputs.timeout-minutes }} minutes
+        timeout-minutes: ${{ fromJSON(needs.setup.outputs.step-timeout) }}
+        run: |
+          node dist/bin/encode-blocks.js \
+            wss://sepolia.infura.io/ws/v3/${{ secrets.INFURA_SEPOLIA_RPC_KEY }} \
+            /var/tmp/encoded-data/ethers/
+        env:
+          TIMEOUT_MINUTES: ${{ needs.setup.outputs.timeout-minutes }}
+
+      - name: Add notices in case of failure
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          # note: GitHub appears to display these in reverse order
+          echo "::notice::SUGGESTION: Trigger this workflow manually against the same branch to verify the changes."
+          echo "::notice::IMPORTANT:  Secret credentials may be missing for PRs from Dependabot!"
+
+      - name: Report result to Slack
+        if: failure() && github.event_name == 'schedule'
+        uses: act10ns/slack@v2
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          status: ${{ job.status }}
+          channel: '#protocol-internal'
+          message: 'Ethers encode failed! cc <@U028EMRHS3S>'
+
+      - name: Upload encoded data
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: encoded-by-ethers
+          path: /var/tmp/encoded-data/ethers
+          include-hidden-files: true
+
+  compare-data:
+    needs:
+      - alloy-encode
+      - ethers-encode
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Setup
+        run: |
+          sudo apt-get install colordiff unzip
+
+      - name: Download encoded data from alloy
+        uses: actions/download-artifact@v8
+        with:
+          path: /var/tmp/encoded-data
+          pattern: encoded-by-alloy
+
+      - name: Git commit alloy data
+        working-directory: /var/tmp/encoded-data
+        run: |
+          git config --global init.defaultBranch main
+          git config --global user.email "creditcoin@gluwa.com"
+          git config --global user.name "gluwa-bot"
+
+          git init
+          git add .
+          git commit -a -m "Import data encoded by alloy"
+
+          # remove everything b/c next we'll import the data from ethers encoding
+          rm -rf *
+
+      - name: Download encoded data from ethers
+        uses: actions/download-artifact@v8
+        with:
+          path: /var/tmp/encoded-data
+          pattern: encoded-by-ethers
+
+      - name: Compare
+        working-directory: /var/tmp/encoded-data
+        timeout-minutes: 5
+        run: |
+          git status
+
+          set -eo pipefail
+          # filter only modified content b/c between the 2 CI jobs we may not have
+          # encoded exactly the same set of blocks. Especially if cargo needs to
+          # recompile from scratch
+          git diff --diff-filter=M | colordiff
+
+          # will exit non-zero in case of differences
+          git diff --quiet --diff-filter=M
+
+      - name: Report result to Slack
+        if: always()
+        uses: act10ns/slack@v2
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          status: ${{ job.status }}
+          channel: '#protocol-internal'
+          message: 'Encoding diff complete! cc <@U028EMRHS3S>'
+
+  decode-transactions:
+    needs:
+      - ethers-encode
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm run build --if-present
+
+      - name: Download encoded data from ethers
+        uses: actions/download-artifact@v8
+        with:
+          path: /var/tmp/encoded-data
+          pattern: encoded-by-ethers
+
+      - name: Decode transactions
+        run: |
+          node dist/bin/decode-blocks.js \
+            wss://rpc.cc3-devnet.creditcoin.network 0xf882f3a71A36E29E86615B7055f42A68D7E4cfBB \
+            /var/tmp/encoded-data/
+
+      - name: Report result to Slack
+        if: always()
+        uses: act10ns/slack@v2
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          status: ${{ job.status }}
+          channel: '#protocol-internal'
+          message: 'Decoding transactions complete! cc <@U028EMRHS3S>'

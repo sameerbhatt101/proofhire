@@ -1,0 +1,86 @@
+# This workflow publishes a package to npm and then creates a GitHub release
+# on git tag push. The release is created only AFTER npm publish succeeds.
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Node.js Package
+
+on:
+  push:
+    tags:
+      - "*"
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions: read-all
+
+jobs:
+  sanity-check:
+    runs-on: ubuntu-latest
+    outputs:
+      TAG_NAME: ${{ steps.identify-tag.outputs.TAG_NAME }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Figure out tag name
+        id: identify-tag
+        shell: bash
+        run: |
+          TAG_NAME=$(git describe --tag)
+          echo "TAG_NAME=$TAG_NAME" >> "$GITHUB_ENV"
+          echo "TAG_NAME=$TAG_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Check tag name vs. package.json version
+        shell: bash
+        run: |
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION="${TAG_NAME#v}"
+          if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
+            echo "Tag ($TAG_VERSION) does not match package.json version ($PKG_VERSION)"
+            exit 1
+          fi
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: sanity-check
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org/'
+          cache: 'npm'
+
+      # Ensure npm >= 11.5.1 (required for trusted publishing)
+      - run: npm i -g npm@latest
+      - run: npm ci
+      - run: npm run test:smoke
+      - run: npm run build
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs:
+      - sanity-check
+      - publish
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Make the release
+        uses: softprops/action-gh-release@v3
+        with:
+          name: ${{ needs.sanity-check.outputs.TAG_NAME }}
+          tag_name: ${{ needs.sanity-check.outputs.TAG_NAME }}
+          generate_release_notes: true

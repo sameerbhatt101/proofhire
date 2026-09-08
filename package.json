@@ -1,0 +1,26 @@
+{
+  "name": "proofhire-buidl-ctc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ProofHire - Attestcoin milestone escrow for DoraHacks BUIDL CTC 2026 Fall",
+  "license": "MIT",
+  "scripts": {
+    "worker:submit": "tsx worker/submit_acceptance_proof.ts",
+    "worker:watch": "tsx worker/watch_and_submit.ts",
+    "typecheck": "tsc --noEmit",
+    "build:contracts": "forge build"
+  },
+  "dependencies": {
+    "@gluwa/asc-contracts": "0.2.1",
+    "@gluwa/usc-sdk": "0.18.0",
+    "@openzeppelin/contracts": "5.4.0",
+    "dotenv": "17.4.2",
+    "ethers": "^6.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.22.4",
+    "typescript": "^5.9.2"
+  },
+  "packageManager": "yarn@1.22.22"
+}
